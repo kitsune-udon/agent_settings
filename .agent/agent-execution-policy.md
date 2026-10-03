@@ -4,6 +4,8 @@ MUST = required. MUST NOT = prohibited. SHOULD = the default unless a documented
 
 A **change unit** is a coherent set of changes sharing an objective and validation approach, evaluated and decided on together.
 
+A **material decision outcome** is a user-requested diagnostic, design, or assessment conclusion delivered without a change unit whose error could materially affect required behavior, security, data integrity, compatibility, reliability, or an externally visible or costly-to-reverse decision; or a discretionary decision that leaves an explicit user requirement unmet or changes the task's completion criteria. Its review is required before delivery or adoption, even if no candidate has been selected for planning or implementation. Routine factual answers, low-impact reversible advice, intermediate hypotheses, and screening of optional alternatives that does not finalize such a decision do not individually require review. Findings and judgments produced as part of a required review introduce no recursive review layer; standalone user-requested assessments remain subject to the materiality criteria above.
+
 Tasks and local subgoals do not require a runtime **Goal**. Goal lifecycle rules below apply only when a runtime Goal exists.
 
 Apply this policy within governing runtime instructions and the user's authorization. Review or acceptance does not grant permission for external actions or override tool, model, or lifecycle restrictions.
@@ -19,7 +21,7 @@ Nested repository instructions may supplement local procedures and conventions, 
 - The main agent owns objective interpretation, decomposition, prioritization, delegation, integration, and final acceptance. Its runtime Goal decisions remain subject to runtime lifecycle conditions and permissions.
 - Create a runtime Goal only when explicitly requested by the user or required by governing runtime instructions. Do not infer a Goal request from an ordinary task or from continuous-improvement mode alone.
 - Investigation, implementation, and validation may be delegated. Accountability for the overall result remains with the main agent.
-- Required critical review MUST be performed by a sub-agent that does not implement the change unit under review.
+- Required critical review MUST be performed by an eligible independent sub-agent under the reviewer independence rules below.
 - Ending an agent turn does not itself complete, pause, or block a Goal. Follow runtime lifecycle rules; waiting does not imply polling or automatic background execution.
 
 ### Stop and resume
@@ -41,14 +43,14 @@ Nested repository instructions may supplement local procedures and conventions, 
 
 ### Task records
 
-For each selected change unit, keep a proportionate record in an existing issue, PR, task, or review artifact. Identify the objective and acceptance criteria; selection and work state; the reviewed source version and diff, including relevant uncommitted changes; plan and result reviewers and their judgments; validation scope, commands or checks, execution status, results, and evidence references; material findings and dispositions; and partial changes or unfinished operations when relevant. Mark unavailable or outstanding evidence explicitly. Reuse records rather than adding tracking infrastructure or duplicating full transcripts, and exclude secrets and sensitive data.
+For each selected change unit or material decision outcome, keep a proportionate record in an existing issue, PR, task, or review artifact. Identify the objective and applicable acceptance or decision criteria; selection and work state; the reviewed input and output versions and diff when applicable, including relevant uncommitted changes; required reviewers and their judgments; validation scope, commands or checks, execution status, results, and evidence references; material findings and dispositions; and partial changes or unfinished operations when relevant. Mark unavailable or outstanding evidence explicitly. A concise review response can serve as the record when no existing artifact fits; no new file or external write is required solely for recordkeeping. Reuse records rather than adding tracking infrastructure or duplicating full transcripts, and exclude secrets and sensitive data.
 
 ### Schedule for wall-clock time and speculative execution
 
 - Optimize expected elapsed time to a verified, reviewed result within correctness, authorization, and resource constraints. For nontrivial work, identify blocking dependencies and the critical path; prioritize work that removes those delays without requiring an exhaustive schedule.
 - Batch independent reads and tool calls and overlap independent investigation, implementation, validation, and review where dependencies permit. While waiting, advance justified work rather than polling. Account for setup, contention, coordination, integration, and rework when choosing concurrency.
 - Use bounded speculative work when plausible time saved outweighs expected discard, rework, and verification costs. Define unresolved assumptions, isolated outputs, a resource bound, and conditions for stopping, discarding, or adopting the work. Do not require numeric estimates without defensible data or speculate merely to occupy agents.
-- Isolated drafts and reversible experiments may start before plan review or other decision evidence is complete. Keep speculative writes in scratch storage or isolated worktrees. MUST NOT integrate or adopt their outputs into the shared baseline before required plan review and relevant prerequisites are satisfied. Speculation MUST NOT create overlapping write ownership, alter authoritative user data or shared operational state, perform unapproved external actions, or bypass security controls or required checks.
+- Isolated drafts and reversible experiments may start before required plan review or other decision evidence is complete. Keep speculative writes in scratch storage or isolated worktrees. MUST NOT integrate or adopt their outputs into the shared baseline before required plan review and relevant prerequisites are satisfied. Isolation or reversibility alone does not qualify work for the plan-review exemption below. Speculation MUST NOT create overlapping write ownership, alter authoritative user data or shared operational state, perform unapproved external actions, or bypass security controls or required checks.
 - File isolation does not isolate command execution. Before speculative commands or checks, assess relevant targets, credential scope, shared resources, and likely side effects proportionately. Use existing execution isolation, static drafting, or authorized read-only inspection as needed to bound those effects. Authorized read-only access and safe, nonconflicting use of shared caches remain permitted.
 - Stop further speculative execution when its assumptions fail or its expected benefit no longer justifies continuing. Apply the Stop and resume rules to cancellation, cleanup, unfinished operations, and any authorized resumption. Discard or retain isolated outputs with a material rationale recorded within the change unit; individual artifacts do not require separate review. Rejection or deferral of the change unit itself still follows the review criteria below.
 - Limit parallel alternatives to a concrete uncertainty or critical-path benefit and the available resources. Prefer a focused experiment when it can resolve the uncertainty more cheaply; cancel redundant work once sufficient evidence selects an approach.
@@ -68,7 +70,7 @@ For each selected change unit, keep a proportionate record in an existing issue,
 - MUST use model-and-effort configurations supported by the runtime and permitted by governing instructions. Inherit runtime defaults unless a permitted override is justified by task requirements or an applicable established baseline.
 - Reuse established baseline configurations for recurring task types when applicable. Without an established baseline, treat the allowed configuration choice as provisional; do not describe it as validated or create configuration machinery solely for routine assignments.
 - Before assignment, check information, tools, permissions, context, availability, and role constraints.
-- Before delegating implementation, MUST confirm how a sub-agent that does not implement the change unit can perform its required reviews within current runtime and resource limits. Avoid consuming the capacity needed for that reviewer with implementation assignments. Reuse an eligible reviewer when appropriate; this does not require a permanent reservation or creating agents without a concrete need. If required review cannot be obtained, apply the review hold rules below.
+- Before delegating implementation, MUST confirm how an eligible independent sub-agent can perform its required reviews within current runtime and resource limits. Avoid consuming the capacity needed for that reviewer with implementation assignments. Reuse an eligible reviewer when appropriate; this does not require a permanent reservation or creating agents without a concrete need. If required review cannot be obtained, apply the review hold rules below.
 - Reuse an agent when its configuration and retained context serve the assignment. Otherwise, select another or create one. Do not preallocate agents without a concrete need.
 - Reassess when requirements materially change or retained context causes errors or unnecessary work. Prefer fresh context when stale assumptions, unrelated history, configuration needs, or independent assessment requirements outweigh continuity.
 - Do not assume an existing agent's configuration can be changed. Use only runtime-supported operations.
@@ -88,28 +90,54 @@ For each selected change unit, keep a proportionate record in an existing issue,
 - Without comparative evidence, do not claim a configuration is superior or cheaper overall. Reuse evaluation evidence rather than benchmarking every model or adding benchmarks solely to justify routine assignments.
 - Configuration evaluation never replaces output verification or required review.
 
+### Reviewer independence
+
+- A reviewer MUST NOT implement the change unit under review or serve as the sole independent reviewer of a plan, substantive conclusion, validation design, or original success interpretation for which it was the primary author. Apply this restriction to the affected subject; it does not require separate staff for every investigation or verification activity.
+- Collecting source facts or running predefined checks does not by itself disqualify a reviewer. Reporting findings and suggesting corrections during review does not constitute primary authorship. If a reviewer takes ownership of drafting the reviewed artifact or defining its validation criteria or original success claims, obtain eligible independent review of those portions.
+- Reusing the plan reviewer for result review remains permitted when these conditions hold. Independence does not require a different model, fresh agent context, or independent reproduction of every check.
+
+### Plan-review exemption
+
+Independent result review remains mandatory for every implemented change unit. Plan review is required unless a low-impact mechanical change meets **all** of these conditions:
+
+- Its intended edit, affected scope, and verification method are clear, with no material design choice or unresolved assumption.
+- It does not change behavior, external contracts, persisted data, authorization, operational procedures, or agent obligations.
+- Its impact is limited and it is easy to reverse.
+
+The main agent MAY omit plan review when these conditions hold. Record the rationale briefly in the existing task record before implementation; no separate exemption approval is required. The result reviewer MUST assess the exemption's applicability as well as the change. Change size or a documentation-only diff does not establish eligibility: a descriptive typo correction may qualify, while a one-line authentication or review-policy change does not.
+
+If eligibility is uncertain, obtain plan review. If the conditions cease to hold, obtain plan review before further ordinary implementation. If the exemption was applied incorrectly, hold acceptance, record the missed prerequisite and partial work, and obtain the missing plan review to determine proportionate recovery before further ordinary implementation or acceptance. Resolve relevant prerequisite or safety findings and repeat only affected validation and result review; retrospective review MUST NOT be reported as timely plan review.
+
 ### Change and review workflow
 
 Before implementing a change unit, including speculative drafts or experiments, define the objective, supporting evidence, expected effect, preservation requirements, validation methods, and acceptance criteria. Distinguish authorized intentional changes from behavior and data that must remain unchanged.
 
-1. **Plan review — Non-implementing sub-agent:** Assess necessity, evidence, alternatives, scope, total burden, and validation adequacy.
+1. **Plan review, unless exempt — Eligible independent sub-agent:** Assess necessity, evidence, alternatives, scope, total burden, and validation adequacy.
 2. **Implementation — Main or assigned sub-agent:** Address plan findings and implement.
 3. **Validation — Main or assigned sub-agent:** Check correctness, preservation requirements, and actual effect.
-4. **Result review — Non-implementing sub-agent:** Examine changes, validation evidence, regressions, and uncertainty.
+4. **Result review — Eligible independent sub-agent:** Examine changes, validation evidence, regressions, and uncertainty.
 5. **Decision — Main agent:** Accept, revise, or propose not proceeding.
 
-- Plan review MUST be completed before ordinary implementation; bounded speculative work may start under the conditions above, but requires completed plan review before integration or adoption. Material findings concerning an action's prerequisites or safety MUST be resolved or rejected with evidence before that action; other findings addressed through implementation remain tracked until acceptance. Independent preparation and checks may overlap. Decisions not to proceed use the separate criteria below.
+- Required plan review MUST be completed before ordinary implementation; bounded speculative work may start under the conditions above, but requires completed plan review when applicable before integration or adoption. Material findings concerning an action's prerequisites or safety MUST be resolved or rejected with evidence before that action; other findings addressed through implementation remain tracked until acceptance. Independent preparation and checks may overlap. Decisions not to proceed use the separate criteria below.
 - Result review may inspect available stable changes while validation runs and conclude with findings or validation gaps recommending revision or not proceeding. It MUST NOT recommend acceptance until required validation evidence has been examined and acceptance criteria are satisfied. Acceptance still requires completed result review; the criteria below govern decisions not to proceed.
 - SHOULD use one reviewer per stage and reuse it when assignment prerequisites and configuration remain appropriate. Additional reviewers require a specific expertise or independence need.
+- Scale plans and records to impact. For straightforward changes, briefly identify the intended edit, affected preservation requirements, and focused check. Record required reviews, or the plan-review exemption rationale, concisely in the same artifact using source or diff references and material findings or a brief statement that none were found. Additional documents, exhaustive alternatives, and unrelated checks are unnecessary.
 - Prior agreement with a plan is not evidence of implementation success.
 - Group related changes, but MUST NOT bundle unrelated work solely to reduce review overhead.
-- Do not review individual edits separately or apply review requirements recursively. Task or Goal decomposition introduces no additional review layer.
+- Do not review individual edits, intermediate investigation steps, or review judgments separately or apply review requirements recursively. Task or Goal decomposition introduces no additional review layer.
 - Provide focused context and access to relevant evidence. Reuse prior review context and dispositions; review new differences and affected assumptions, expanding context when impact is unclear. Reviewers SHOULD report material findings with evidence and actionable recommendations, or briefly state that none were found. Avoid repeated context and unrelated stylistic suggestions.
 - For each material finding, record its affected requirements and disposition: resolved, rejected with evidence, or open. Recording a disposition does not satisfy an unmet requirement.
-- Identify the source or diff state examined and the applicability of its validation evidence. After revisions or integration changes, repeat affected validation and review only; renew plan review when scope, material assumptions, or preservation requirements change. Do not treat review of an earlier state as covering later changes without assessing their impact.
-- If required review is unavailable, hold ordinary implementation and speculative integration or adoption pending plan review, or acceptance pending result review, and report the limitation. MUST NOT substitute self-review for required independent review. Continue authorized investigation, independent work, or bounded speculation where its conditions are satisfied; an unavailable review alone does not establish that a runtime Goal is blocked.
+- Identify the source or diff state examined and the applicability of its validation evidence. After revisions or integration changes, repeat affected validation and review only; reassess exemption eligibility and obtain or renew required plan review when scope, material assumptions, or preservation requirements change. Do not treat review of an earlier state as covering later changes without assessing their impact.
+- If required plan review is unavailable, hold ordinary implementation and speculative integration or adoption. If result review is unavailable, hold acceptance; this alone does not prohibit implementing an eligible plan-exempt change. Report the limitation. MUST NOT substitute self-review for required independent review. Continue authorized investigation, independent work, or bounded speculation where its conditions are satisfied; an unavailable review alone does not establish that a runtime Goal is blocked.
 
 Record this hold as `pending required review`: an unresolved work state, not acceptance or a finalized discretionary rejection or deferral. Identify the missing review, unmet criteria, and partial work. Reporting the pending state or ending a turn does not finalize a decision or complete the task. MUST NOT use this state to finalize rejection or deferral without the required review; mandatory user or runtime stops retain their distinct rules below.
+
+### Decision-only review
+
+- For a material decision outcome without implementation, obtain one eligible independent review before delivering the conclusion or adopting the decision. Examine its scope, decisive evidence, material uncertainty, realistic alternatives, and effect on explicit requirements or completion criteria. No plan review is required merely to investigate or prepare this outcome.
+- Review a coherent conclusion or grouped selection rationale, not each candidate or intermediate hypothesis. An existing plan or result review can satisfy this requirement if it explicitly covers the decision and rationale; do not add a separate invocation or approval layer.
+- Reviewer access to relevant source evidence is required; repeating the investigation or every check is not. Obtain further evidence only for a material gap affecting the decision's stated certainty or criteria. A conclusion may accurately report uncertainty without resolving questions outside the requested scope.
+- If this review is unavailable, retain a draft and report `pending required review` rather than finalizing the conclusion or discretionary decision. Authorized investigation and mandatory user or runtime stops follow the existing rules. Review does not authorize changing user requirements; obtain user clarification or authorization where required.
 
 ### Incremental validation and inspection
 
@@ -125,14 +153,15 @@ Record this hold as `pending required review`: an unresolved work state, not acc
 
 - Required behavior, quality, and data constraints are satisfied. Authorized intentional changes meet the agreed acceptance criteria, and preservation requirements outside those changes are satisfied.
 - Validation satisfies the acceptance criteria, and the result reviewer has examined the supporting evidence.
+- Required plan review was obtained, or the result reviewer has confirmed that the plan-review exemption applied. Any incorrectly omitted prerequisite has been recorded and addressed under the exemption's recovery rules.
 - Material findings have documented dispositions, with no unresolved failure of an acceptance or preservation requirement.
 - Identified uncertainties and their effects on required criteria are recorded. Missing or inconclusive evidence for a required criterion is not a pass.
 
 When evidence is insufficient, obtain targeted evidence, revise the change, or submit a decision not to proceed for review.
 
-A candidate becomes a selected change unit when the main agent adopts it for planning or implementation. Record that selection before drafting its plan, requesting plan review, or delegating or starting implementation, including bounded speculative implementation. Initial screening may compare candidates without selecting them for planning or implementation; record its selection rationale proportionately. MUST NOT reclassify a selected change unit as screening to bypass required review.
+A candidate becomes a selected change unit when the main agent adopts it for planning or implementation. Record that selection before drafting its plan, requesting plan review, or delegating or starting implementation, including bounded speculative implementation. Initial screening may compare candidates without selecting them for planning or implementation; record its selection rationale proportionately. MUST NOT reclassify a selected change unit as screening to bypass required review, or use an unselected state to finalize a material decision outcome without its required review.
 
-A decision not to proceed may be temporary or final. Once a candidate is selected as a change unit for planning or implementation, rejection or deferral MUST receive sub-agent review. Initial screening requires recorded selection rationale, not individual reviews.
+A decision not to proceed may be temporary or final. Once a candidate is selected as a change unit for planning or implementation, rejection or deferral MUST receive eligible independent sub-agent review. Before selection, a decision leaving an explicit user requirement unmet or changing completion criteria still requires decision-only review. Other initial screening requires recorded selection rationale, not individual reviews.
 
 These review criteria govern discretionary rejection or deferral, not mandatory stops imposed by the user or runtime. Mandatory stops leave unmet review and validation requirements outstanding; they do not establish acceptance or completion.
 
