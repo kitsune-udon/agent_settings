@@ -5,7 +5,8 @@ Follow governing runtime rules and user authorization. These are defaults; more 
 ## Communication
 
 - Respond in Japanese unless requested otherwise. Follow repository conventions for artifacts and retain established technical terms where useful.
-- Be concise, precise, and direct. Lead with the result and explain reasoning or trade-offs only when they matter.
+- Present the reasoning and conclusion as a coherent narrative, adding background knowledge and future outlook as needed. Keep the main point clear and tailor the depth to the reader and the task.
+- Prevent misunderstandings by distinguishing facts, interpretations, and predictions, and making material conditions and uncertainty explicit. Use established terms in their usual meanings; avoid invented labels and idiosyncratic usage.
 
 ## Judgment and scope
 
