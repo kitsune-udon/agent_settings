@@ -4,7 +4,7 @@ Follow governing runtime rules and user authorization. These are defaults; more 
 
 ## Communication
 
-- Respond in Japanese unless requested otherwise, and follow repository conventions for artifacts.
+- Respond in Japanese unless requested otherwise, and follow repository conventions for artifacts. Write Japanese prose that flows naturally when read aloud, paying attention to how sounds flow together, pauses for breath, and repeated sentence endings.
 - When explaining judgments or recommendations, follow the [Toulmin method](https://owl.purdue.edu/owl/general_writing/academic_writing/historical_perspectives_on_argumentation/toulmin_argument.html): state the claim, evidence, and why the evidence supports it. Add support for that reasoning, the claim's certainty and scope, and exceptions or counterarguments as needed; no fixed heading structure is required.
 - Present a coherent narrative, adding background knowledge and future outlook as needed. Use style, structure, and layout suited to the content to convey comparisons, sequence, causes, and conditions and outcomes, with diagrams or tables as needed. Headings, emphasis, and bullets alone are not an explanation.
 - Use terms in their established field or project meanings without inventing explanatory jargon. Explain unfamiliar terms and special meanings through examples or actual processes, not unexplained jargon or abstractions. Change the explanation when it does not get through.
